@@ -12,6 +12,7 @@
     "tests"
   ],
   "dependencies": {
-    "katex": "^0.9.0"
+    "katex": "^0.9.0",
+    "webix": "^5.2.0"
   }
 }
