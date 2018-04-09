@@ -16,16 +16,14 @@ api = Api(app)
 parser = reqparse.RequestParser()
 
 # serve index.html
-
-
 @app.route('/<path:path>')
 def static_proxy(path):
-  return send_from_directory("test", path)
+    return send_from_directory("test", path)
 
 
 @app.route('/')
 def homepage():
-  return send_from_directory("test", "index.html")
+    return send_from_directory("test", "index.html")
 
 
 modules = [
@@ -33,45 +31,35 @@ modules = [
         {"id": "c0", "name": "Light in vacuum", "symbol": "c_0", "args": [], "value": eval("constants.c")}
     ]},
     {"id": "wg", "name": "Waveguide parameters", "items": [
-        {"id": "fc", "name": "Cut-off frequncy", "symbol": "f_c", "versions": [
-            {"id": "1", "name": "TE01 mod dielectric filled waveguide", "args": [
+        {"id": "fc", "name": "Cut-off frequency", "symbol": "f_c", "versions": [
+            {"id": "1", "name": "TE01 mod dielectric filled waveguide", "$height":55, "args": [
                 {"id": "a", "symbol": "a", "name": "Waveguide width"}
             ],
-                "formula": "\dfrac{1}{2\pi\sqrt{\mu_0\epsilon_0\epsilon}\sqrt{\dfrac{1}{a}}}"}
-        ], "args": [
-            {"id": "a", "name": "Waveguide width", "optional": True, "default": 0},
-            {"id": "b", "name": "Waveguide height", "optional": True, "default": 0},
-            {"id": "m", "name": "First mode index", "optional": False},
-            {"id": "n", "name": "Second mode index", "optional": False}
+                "formula": "\\dfrac{1}{2\\pi\\sqrt{\\mu_0\\epsilon_0\\epsilon_r}}\\sqrt{\\dfrac{1}{a}}"}
         ]}
     ]}
 ]
 
 
 class EM(Resource):
-  def get(self):
-    return modules
+    def get(self):
+        return modules
 
 
 class EM_Constants(Resource):
-  def get(self, sym):
-    items = next(module["item"] for module in modules if module["id"] == "const")
-    return next(item for item in items if item["id"] == sym)
+    def get(self, sym):
+        module = next(module["items"] for module in modules if module["id"] == "const")
+        return next(item for item in module if item["id"] == sym)
 
 
 class EM_Waveguide(Resource):
-  def get(self, sym):
-    items = next(module["modules"] for module in modules if module["id"] == "wg")
-    item = next(item for item in items if item["id"] == sym)
-    for arg in item["args"]:
-      if arg["id"] not in request.args.keys() and not arg["optional"]:
-        return {"error": ""}
-      else:
-        return request.args
-    return request.args
+    def get(self, sym):
+        module = next(module["items"] for module in modules if module["id"] == "wg")
+        item = next(item for item in module if item["id"] == sym)
+        return item
 
 
 api.add_resource(EM, '/em')
 api.add_resource(EM_Constants, '/em/const/<sym>')
 api.add_resource(EM_Waveguide, '/em/wg/<sym>')
-app.run(port=5001, debug=True)
+app.run(port=5001)
