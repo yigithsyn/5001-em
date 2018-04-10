@@ -46,7 +46,7 @@
             }
           ],
           "symbol": "\\dfrac{1}{2\\pi\\sqrt{\\mu_0\\epsilon_0\\epsilon_r}}\\sqrt{\\left(\\dfrac{\\pi}{a}\\right)^2} = \\dfrac{c_0}{2a\\sqrt{\\epsilon_r}}",
-          "eval": "lambda args: c/(2*args[1]*sqrt(args[0]))/1E6"
+          "eval": "lambda args: float('%.2f'%(c/(2*args[1]*sqrt(args[0]))/1E6))"
         }
       ]
     }
