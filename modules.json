@@ -1,0 +1,54 @@
+[{
+  "no": "A",
+  "id": "const",
+  "name": "Physical constants",
+  "items": [
+    {
+      "no": "1",
+      "id": "c0",
+      "name": "Light in vacuum",
+      "symbol": "c_0",
+      "args": [],
+      "value": "c",
+      "unit": "m/s"
+    }
+  ]
+},
+{
+  "no": "B",
+  "id": "wg",
+  "name": "Waveguide parameters",
+  "items": [
+    {
+      "no": "1",
+      "id": "fc",
+      "name": "Cut-off frequency",
+      "symbol": "f_c",
+      "unit": "MHz",
+      "versions": [
+        {
+          "no": "1",
+          "name": "TE01 mod dielectric filled waveguide",
+          "args": [
+            {
+              "no": "1",
+              "id": "er",
+              "symbol": "\\epsilon_r",
+              "cast": "float",
+              "name": "Dielectric coefficient of substrate"
+            },
+            {
+              "no": "2",
+              "id": "a",
+              "symbol": "a",
+              "cast": "float",
+              "name": "Waveguide width"
+            }
+          ],
+          "symbol": "\\dfrac{1}{2\\pi\\sqrt{\\mu_0\\epsilon_0\\epsilon_r}}\\sqrt{\\left(\\dfrac{\\pi}{a}\\right)^2} = \\dfrac{c_0}{2a\\sqrt{\\epsilon_r}}",
+          "eval": "lambda args: c/(2*args[1]*sqrt(args[0]))/1E6"
+        }
+      ]
+    }
+  ]
+}]
