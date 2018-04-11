@@ -1,54 +1,231 @@
-[{
-  "no": "A",
-  "id": "const",
-  "name": "Physical constants",
-  "items": [
-    {
-      "no": "1",
-      "id": "c0",
-      "name": "Light in vacuum",
-      "symbol": "c_0",
-      "args": [],
-      "value": "c",
-      "unit": "m/s"
-    }
-  ]
-},
-{
-  "no": "B",
-  "id": "wg",
-  "name": "Waveguide parameters",
-  "items": [
-    {
-      "no": "1",
-      "id": "fc",
-      "name": "Cut-off frequency",
-      "symbol": "f_c",
-      "versions": [
-        {
-          "no": "1",
-          "name": "TE01 mod dielectric filled waveguide",
-          "args": [
-            {
-              "no": "1",
-              "id": "er",
-              "symbol": "\\epsilon_r",
-              "cast": "float",
-              "name": "Dielectric coefficient of substrate"
-            },
-            {
-              "no": "2",
-              "id": "a",
-              "symbol": "a",
-              "cast": "float",
-              "name": "Waveguide width"
-            }
-          ],
-          "symbol": "\\dfrac{1}{2\\pi\\sqrt{\\mu_0\\epsilon_0\\epsilon_r}}\\sqrt{\\left(\\dfrac{\\pi}{a}\\right)^2} = \\dfrac{c_0}{2a\\sqrt{\\epsilon_r}}",
-          "eval": "lambda args: float('%.2f'%(c/(2*args[1]*sqrt(args[0]))/1E6))",
-          "unit": "MHz"
-        }
-      ]
-    }
-  ]
-}]
+[
+  {
+    "no": "A",
+    "_id": "const",
+    "name": "Physical constants",
+    "items": [
+      {
+        "no": "1",
+        "_id": "c0",
+        "name": "Light in vacuum",
+        "symbol": "c_0",
+        "args": [],
+        "value": 299792458,
+        "cast": "float",
+        "unit": "m/s"
+      },
+      {
+        "no": "2",
+        "_id": "eps0",
+        "name": "Vacuum permittivity",
+        "symbol": "\\epsilon_0",
+        "args": [],
+        "value": 8.854187817620389e-12,
+        "cast": "float",
+        "unit": "F/m (Farad per meter)"
+      },
+      {
+        "no": "3",
+        "_id": "mu0",
+        "name": "Vacuum permeability",
+        "symbol": "\\mu_0",
+        "args": [],
+        "value": 1.2566370614359173e-06,
+        "cast": "float",
+        "unit": "H/m (Henry per meter)"
+      }
+    ]
+  },
+  {
+    "no": "B",
+    "_id": "wg",
+    "name": "Waveguide medium",
+    "items": [
+      {
+        "no": "1",
+        "_id": "fc",
+        "name": "Cut-off frequency",
+        "symbol": "f_c",
+        "versions": [
+          {
+            "no": "1",
+            "name": "TE01 mod dielectric filled waveguide",
+            "args": [
+              {
+                "no": "1",
+                "_id": "er",
+                "symbol": "\\epsilon_r",
+                "cast": "float",
+                "name": "Dielectric coefficient of substrate"
+              },
+              {
+                "no": "2",
+                "_id": "a",
+                "symbol": "a",
+                "cast": "float",
+                "name": "Waveguide width",
+                "unit": "m"
+              }
+            ],
+            "symbol": "\\dfrac{1}{2\\pi\\sqrt{\\mu_0\\epsilon_0\\epsilon_r}}\\sqrt{\\left(\\dfrac{\\pi}{a}\\right)^2} = \\dfrac{c_0}{2a\\sqrt{\\epsilon_r}}",
+            "eval": "lambda args: float('%.2f'%(c/(2*args[1]*sqrt(args[0]))/1E6))",
+            "cast": "float",
+            "unit": "MHz"
+          }
+        ]
+      },
+      {
+        "no": "2",
+        "_id": "betaz",
+        "name": "Propagation constant",
+        "symbol": "\\beta_z",
+        "versions": [
+          {
+            "no": "1",
+            "name": "From cut-off frequency",
+            "args": [
+              {
+                "no": "1",
+                "_id": "beta",
+                "symbol": "\\beta(=k)",
+                "cast": "float",
+                "name": "Unbounded medium wave number",
+                "unit": "rad/m"
+              },
+              {
+                "no": "2",
+                "_id": "fc",
+                "symbol": "f_c",
+                "cast": "float",
+                "name": "Cut-off frequency",
+                "unit": "MHz"
+              },
+              {
+                "no": "3",
+                "_id": "f",
+                "symbol": "f",
+                "cast": "float",
+                "name": "Frequency of interest",
+                "unit": "MHz"
+              }
+            ],
+            "symbol": "\\pm \\beta \\sqrt{1-\\left(\\dfrac{f_c}{f}\\right)^2}",
+            "eval": "lambda args: float('%.2f'%(args[0]*sqrt(1-(args[1]/args[2])**2)))",
+            "cast": "float",
+            "unit": "rad/m"
+          }
+        ]
+      },
+      {
+        "no": "3",
+        "_id": "lambdag",
+        "name": "Guided wavelength",
+        "symbol": "\\lambda_g",
+        "versions": [
+          {
+            "no": "1",
+            "name": "From propagation constant",
+            "args": [
+              {
+                "no": "1",
+                "_id": "betaz",
+                "symbol": "\\beta_z",
+                "cast": "float",
+                "name": "Propagation constant",
+                "unit": "rad/m"
+              }
+            ],
+            "symbol": "2\\pi/\\beta_z",
+            "eval": "lambda args: float('%.2f'%(2*pi/betaz))",
+            "unit": "m"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "no": "C",
+    "_id": "um",
+    "name": "Unbounded medium",
+    "items": [
+      {
+        "no": "1",
+        "_id": "k0",
+        "name": "Free space wavenumber",
+        "symbol": "k_0",
+        "versions": [
+          {
+            "no": "1",
+            "name": "From frequency",
+            "args": [
+              {
+                "no": "1",
+                "_id": "f",
+                "symbol": "f",
+                "cast": "float",
+                "name": "Frequency",
+                "unit": "MHz"
+              }
+            ],
+            "symbol": "2\\pi\\sqrt{\\epsilon_0\\mu_0} = 2\\pi f/c_0 = \\omega/c_0",
+            "eval": "lambda args: float('%.2f'%(2*pi*args[0]*1E6/c))",
+            "cast": "float",
+            "unit": "rad/m"
+          },
+          {
+            "no": "2",
+            "name": "From wavelength",
+            "args": [
+              {
+                "no": "1",
+                "_id": "lambda",
+                "symbol": "\\lambda",
+                "cast": "float",
+                "name": "Wavelength",
+                "unit": "m"
+              }
+            ],
+            "symbol": "2\\pi/\\lambda",
+            "eval": "lambda args: float('%.2f'%(2*pi/args[0]))",
+            "cast": "float",
+            "unit": "rad/m"
+          }
+        ]
+      },
+      {
+        "no": "2",
+        "_id": "k",
+        "name": "Wavenumber",
+        "symbol": "k = \\beta",
+        "versions": [
+          {
+            "no": "1",
+            "name": "From frequency",
+            "args": [
+              {
+                "no": "1",
+                "_id": "f",
+                "symbol": "f",
+                "cast": "float",
+                "name": "Frequency",
+                "unit": "MHz"
+              },
+              {
+                "no": "2",
+                "_id": "er",
+                "symbol": "\\epsilon_r",
+                "cast": "float",
+                "name": "Dielectric coefficient",
+                "unit": ""
+              }
+            ],
+            "symbol": "2\\pi\\sqrt{\\epsilon_r\\epsilon_0\\mu_0} = 2\\pi f/(c_0\\sqrt{\\epsilon_r}) = \\omega/(c_0\\sqrt{\\epsilon_r})",
+            "eval": "lambda args: float('%.2f'%(2*pi*args[0]*1E6/(c*sqrt(args[1]))))",
+            "cast": "float",
+            "unit": "rad/m"
+          }
+        ]
+      }
+    ]
+  }
+]

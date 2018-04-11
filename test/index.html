@@ -26,20 +26,10 @@
 
 <body>
   <script>
-    function formatBytes(a, b) {
-      if (0 == a) return "0 Bytes";
-      var c = 1024, d = b || 2,
-        e = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"],
-        f = Math.floor(Math.log(a) / Math.log(c));
-      return parseFloat((a / Math.pow(c, f)).toFixed(d)) + " " + e[f]
-    }
     webix.ready(function () {
       var myjson = webix.DataDriver.myjson = webix.copy(webix.DataDriver.json);
       myjson.child = function (obj) {
-        // console.log(obj)
         if (obj.$level == 2 && obj.versions) {
-          // console.log(obj.versions)
-          // obj.versions.forEach(function (item) { item.$height = 50 })
           return obj.versions
         }
         if (obj.$level == 3) {
@@ -48,119 +38,74 @@
         else return obj.items
       };
 
-      noTemplate = function (obj) {
-        if (obj.$level == 1) {
-          return obj.no
-        }
-        else if (obj.$level == 2) {
-          var parent = $$("moduleTree").getItem(obj.$parent)
-          return parent.no + "." + obj.no
-        }
-        else if (obj.$level == 3) {
-          var parent = $$("moduleTree").getItem(obj.$parent)
-          var pparent = $$("moduleTree").getItem(parent.$parent)
-          return pparent.no + "." + parent.no + "." + obj.no
-        }
-        else if (obj.$level == 4) {
-          var parent = $$("moduleTree").getItem(obj.$parent)
-          var pparent = $$("moduleTree").getItem(parent.$parent)
-          var ppparent = $$("moduleTree").getItem(pparent.$parent)
-          return ppparent.no + "." + pparent.no + "." + parent.no + "." + obj.no
-        }
-        else return ""
-      };
-
       latexTemplate = function (obj) {
         if (obj.$level > 1) {
-          return katex.renderToString(obj.symbol, { "maxsize": 10 })
+          return katex.renderToString(obj.symbol)
         }
-        // if (obj.$level == 2 && obj.$parent == "const") {
-        //   return katex.renderToString(obj.symbol)
-        // }
-        // else if (obj.$level == 3) {
-        //   return katex.renderToString(obj.symbol)
-        // }
-        // else if (obj.$level == 4) {
-        //   return katex.renderToString(obj.symbol)
-        // }
         else return ""
       };
 
       valueTemplate = function (obj) {
-        // console.log(obj)
-        if (obj.$level === 2 && obj.$parent === "const") {
-          // console.log(obj)
-          return webix.ajax().sync().get("/em/const/" + obj.id).response;
-        }
-        else if (obj.value) {
-          if (obj.$level === 4) {
-            var parent = $$("moduleTree").getItem(obj.$parent)
-            var pparent = $$("moduleTree").getItem(parent.$parent)
-            var ppparent = $$("moduleTree").getItem(pparent.$parent)
-            // console.log(parent)
-            // console.log(pparent)
-            // console.log(ppparent)
-            var url = "/em/" + ppparent.id + "/" + pparent.id + "/" + parent.no + "?"
-            for (var i = 0; i < parent.args.length; i++) {
-              if (obj.id === parent.args[i]["id"]) url += parent.args[i]["id"] + "=" + obj.value + "&"
-              else url += parent.args[i]["id"] + "=" + parent.args[i].value + "&"
-            }
-            parent.value = webix.ajax().sync().get(url).response;
-            // webix.ajax().get(url, function (t, d, x) {
-            //   parent.value = d.json()
-            //   setTimeout(function () { webix.once(function(){$$("moduleTree").refresh(); console.log("test")}) }, 2000)
-              
-            // })
-            // console.log(parent)
-            // $$("moduleTree").updateItem(parent.id, parent)
-            // console.log(url)
-            return obj.value;
-          }
+        if (obj.value) {
+          if(obj.cast === "float") return parseFloat(obj.value).toExponential(6)
           else return obj.value
+          // console.log(obj.value)
+          // return obj.value
         }
-        else return ""
-      };
+        return ""
+      }
 
-      formulaHeight = function (obj) {
-        if (obj.$level == 3) {
-          return { "margin": "8px auto;" }
-        }
-      };
+
       webix.ui({
         rows: [
           {
             id: "moduleTree",
             view: "treetable",
             columns: [
-              { id: "name", header: "Name", fillspace: 2, template: "{common.treetable()} <span style='display:table-cell; vertical-align:middle;'>#no#.  #name#</span>" },
-              { id: "symbol", header: "Formula/Symbol", fillspace: 1, template: latexTemplate, css: formulaHeight },
-              { id: "value", header: "Value", fillspace: 1, template: valueTemplate, editor: "text" },
-              { id: "unit", header: "Unit", width: 50 },
+              { id: "name", header: "Name", fillspace: 1, template: "{common.treetable()} #no#. #name#" },
+              { id: "symbol", header: "Formula/Symbol", fillspace: 1, template: latexTemplate },
+              // { id: "value", header: "Value", width:200, editor: "text", template: valueTemplate },
+              { id: "value", header: "Value", width: 200, editor: "text" },
+              { id: "unit", header: "Unit", width: 50 }
             ],
             url: "/em",
             datatype: "myjson",
-            select: false,
-            fixedRowHeight: false,
+            select: true,
             fixedRowHeight: false,
             rowLineHeight: 23,
             ready: function () {
               this.adjustRowHeight("symbol");
             },
             editable: true,
-            // editaction:"dblclick",
             on: {
               "onAfterEditStop": function (state, editor) {
-                setTimeout(function () { $$("moduleTree").refresh() }, 2000)
+                if (state.value != state.old) {
+                  var obj = this.getSelectedItem()
+                  if (obj.$level === 4) {
+                    var parent = $$("moduleTree").getItem(obj.$parent)
+                    var pparent = $$("moduleTree").getItem(parent.$parent)
+                    var ppparent = $$("moduleTree").getItem(pparent.$parent)
+                    var url = "/em/" + ppparent._id + "/" + pparent._id + "/" + parent.no + "?"
+                    for (var i = 0; i < parent.args.length; i++) {
+                      if (obj._id === parent.args[i]["_id"]) url += parent.args[i]["_id"] + "=" + obj.value + "&"
+                      else url += parent.args[i]["_id"] + "=" + parent.args[i].value + "&"
+                    }
+                    webix.ajax().get(url, function (t, d, x) {
+                      parent.value = d.json()
+                      $$("moduleTree").refresh();
+                    })
+                  }
+                  else {
+                    obj.value = ""
+                    $$("moduleTree").refresh();
+                  }
+                }
               },
-              "onresize": webix.once(function () {
-                this.adjustRowHeight("symbol", true);
-              })
             }
           }
         ]
       });
-      setTimeout(function () { $$("moduleTree").openAll() }, 2000)
-      // setInterval(function () { $$("moduleTree").refresh() }, 2000)
+      setTimeout(function () { $$("moduleTree").serialize().forEach(function (item) { $$("moduleTree").open(item.id) }) }, 2000)
     })
   </script>
 </body>
