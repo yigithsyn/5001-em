@@ -225,6 +225,32 @@
             "unit": "rad/m"
           }
         ]
+      },
+      {
+        "no": "3",
+        "_id": "lambda",
+        "name": "Wavelength",
+        "symbol": "\\lambda",
+        "versions": [
+          {
+            "no": "1",
+            "name": "From frequency",
+            "args": [
+              {
+                "no": "1",
+                "_id": "f",
+                "symbol": "f",
+                "cast": "float",
+                "name": "Frequency",
+                "unit": "MHz"
+              }
+            ],
+            "symbol": "c_0/f",
+            "eval": "lambda args: float('%.2f'%(c/(args[0]*1e6)))",
+            "cast": "float",
+            "unit": "m"
+          }
+        ]
       }
     ]
   }
