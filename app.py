@@ -40,7 +40,7 @@ class EM(Resource):
 class EM_Constants(Resource):
     def get(self, sym):
         module = next(module["items"] for module in modules if module["_id"] == "const")
-        return next(eval(item["value"]) for item in module if item["_id"] == sym)
+        return next(item["value"] for item in module if item["_id"] == sym)
 
 
 class EM_Parameters(Resource):
