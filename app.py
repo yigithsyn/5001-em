@@ -42,11 +42,12 @@ class EM_Constants(Resource):
         module = next(module["items"] for module in modules if module["_id"] == "const")
         return next(item["value"] for item in module if item["_id"] == sym)
 
-
 class EM_Parameters(Resource):
     def get(self, mod, sym, ver):
         module = next(module["items"] for module in modules if module["_id"] == mod)
         item = next(item for item in module if item["_id"] == sym)
+        if int(ver) == 0:
+            return item["name"]
         largs = []
         eval_ver = item["versions"][int(ver)-1]
         for arg in eval_ver["args"]:
