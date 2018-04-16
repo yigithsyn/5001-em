@@ -68,7 +68,7 @@
               }
             ],
             "symbol": "\\dfrac{1}{2\\pi\\sqrt{\\mu_0\\epsilon_0\\epsilon_r}}\\sqrt{\\left(\\dfrac{\\pi}{a}\\right)^2} = \\dfrac{c_0}{2a\\sqrt{\\epsilon_r}}",
-            "eval": "lambda args: float('%.2f'%(c/(2*args[1]*sqrt(args[0]))/1E6))",
+            "eval": "lambda args: float('%.6f'%(c/(2*args[1]*sqrt(args[0]))/1E6))",
             "cast": "float",
             "unit": "MHz"
           }
@@ -110,7 +110,7 @@
               }
             ],
             "symbol": "\\pm \\beta \\sqrt{1-\\left(\\dfrac{f_c}{f}\\right)^2}",
-            "eval": "lambda args: float('%.2f'%(args[0]*sqrt(1-(args[1]/args[2])**2)))",
+            "eval": "lambda args: float('%.6f'%(args[0]*sqrt(1-(args[1]/args[2])**2)))",
             "cast": "float",
             "unit": "rad/m"
           }
@@ -136,7 +136,7 @@
               }
             ],
             "symbol": "2\\pi/\\beta_z",
-            "eval": "lambda args: float('%.2f'%(2*pi/betaz))",
+            "eval": "lambda args: float('%.6f'%(2*pi/betaz))",
             "unit": "m"
           }
         ]
@@ -168,7 +168,7 @@
               }
             ],
             "symbol": "2\\pi\\sqrt{\\epsilon_0\\mu_0} = 2\\pi f/c_0 = \\omega/c_0",
-            "eval": "lambda args: float('%.2f'%(2*pi*args[0]*1E6/c))",
+            "eval": "lambda args: float('%.6f'%(2*pi*args[0]*1E6/c))",
             "cast": "float",
             "unit": "rad/m"
           },
@@ -186,7 +186,7 @@
               }
             ],
             "symbol": "2\\pi/\\lambda",
-            "eval": "lambda args: float('%.2f'%(2*pi/args[0]))",
+            "eval": "lambda args: float('%.6f'%(2*pi/args[0]))",
             "cast": "float",
             "unit": "rad/m"
           }
@@ -220,7 +220,7 @@
               }
             ],
             "symbol": "2\\pi\\sqrt{\\epsilon_r\\epsilon_0\\mu_0} = 2\\pi f/(c_0\\sqrt{\\epsilon_r}) = \\omega/(c_0\\sqrt{\\epsilon_r})",
-            "eval": "lambda args: float('%.2f'%(2*pi*args[0]*1E6/(c*sqrt(args[1]))))",
+            "eval": "lambda args: float('%.6f'%(2*pi*args[0]*1E6/(c*sqrt(args[1]))))",
             "cast": "float",
             "unit": "rad/m"
           }
@@ -246,7 +246,7 @@
               }
             ],
             "symbol": "c_0/f",
-            "eval": "lambda args: float('%.2f'%(c/(args[0]*1e6)))",
+            "eval": "lambda args: float('%.6f'%(c/(args[0]*1e6)))",
             "cast": "float",
             "unit": "m"
           }
