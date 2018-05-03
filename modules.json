@@ -68,9 +68,9 @@
               }
             ],
             "symbol": "\\dfrac{1}{2\\pi\\sqrt{\\mu_0\\epsilon_0\\epsilon_r}}\\sqrt{\\left(\\dfrac{\\pi}{a}\\right)^2} = \\dfrac{c_0}{2a\\sqrt{\\epsilon_r}}",
-            "eval": "lambda args: float('%.6f'%(c/(2*args[1]*sqrt(args[0]))/1E6))",
+            "eval": "lambda args: float('%.6f'%(c/(2*args[1]*sqrt(args[0]))))",
             "cast": "float",
-            "unit": "MHz"
+            "unit": "Hz"
           }
         ]
       },
@@ -98,7 +98,7 @@
                 "symbol": "f_c",
                 "cast": "float",
                 "name": "Cut-off frequency",
-                "unit": "MHz"
+                "unit": "Hz"
               },
               {
                 "no": "3",
@@ -106,7 +106,7 @@
                 "symbol": "f",
                 "cast": "float",
                 "name": "Frequency of interest",
-                "unit": "MHz"
+                "unit": "Hz"
               }
             ],
             "symbol": "\\pm \\beta \\sqrt{1-\\left(\\dfrac{f_c}{f}\\right)^2}",
@@ -164,11 +164,11 @@
                 "symbol": "f",
                 "cast": "float",
                 "name": "Frequency",
-                "unit": "MHz"
+                "unit": "Hz"
               }
             ],
             "symbol": "2\\pi\\sqrt{\\epsilon_0\\mu_0} = 2\\pi f/c_0 = \\omega/c_0",
-            "eval": "lambda args: float('%.6f'%(2*pi*args[0]*1E6/c))",
+            "eval": "lambda args: float('%.6f'%(2*pi*args[0]/c))",
             "cast": "float",
             "unit": "rad/m"
           },
@@ -208,7 +208,7 @@
                 "symbol": "f",
                 "cast": "float",
                 "name": "Frequency",
-                "unit": "MHz"
+                "unit": "Hz"
               },
               {
                 "no": "2",
@@ -220,7 +220,7 @@
               }
             ],
             "symbol": "2\\pi\\sqrt{\\epsilon_r\\epsilon_0\\mu_0} = 2\\pi f/(c_0\\sqrt{\\epsilon_r}) = \\omega/(c_0\\sqrt{\\epsilon_r})",
-            "eval": "lambda args: float('%.6f'%(2*pi*args[0]*1E6/(c*sqrt(args[1]))))",
+            "eval": "lambda args: float('%.6f'%(2*pi*args[0]/(c*sqrt(args[1]))))",
             "cast": "float",
             "unit": "rad/m"
           }
@@ -242,11 +242,11 @@
                 "symbol": "f",
                 "cast": "float",
                 "name": "Frequency",
-                "unit": "MHz"
+                "unit": "Hz"
               }
             ],
             "symbol": "c_0/f",
-            "eval": "lambda args: float('%.6f'%(c/(args[0]*1e6)))",
+            "eval": "lambda args: float('%.6f'%(c/(args[0])))",
             "cast": "float",
             "unit": "m"
           }
