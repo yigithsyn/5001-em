@@ -55,7 +55,7 @@ class EM_Parameters(Resource):
         return eval(eval_ver["eval"])(largs)
 
 
-api.add_resource(EM, '/api')
-api.add_resource(EM_Constants, '/api/const/<sym>')
-api.add_resource(EM_Parameters, '/api/<mod>/<sym>/<ver>')
+api.add_resource(EM, '/em')
+api.add_resource(EM_Constants, '/em/const/<sym>')
+api.add_resource(EM_Parameters, '/em/<mod>/<sym>/<ver>')
 app.run(port=5001)
