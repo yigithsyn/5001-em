@@ -68,7 +68,7 @@
               { id: "value", header: "Value", width: 200, editor: "text" },
               { id: "unit", header: "Unit", width: 50 }
             ],
-            url: "/em",
+            url: "/em/api",
             datatype: "myjson",
             select: true,
             fixedRowHeight: false,
@@ -85,7 +85,7 @@
                     var parent = $$("moduleTree").getItem(obj.$parent)
                     var pparent = $$("moduleTree").getItem(parent.$parent)
                     var ppparent = $$("moduleTree").getItem(pparent.$parent)
-                    var url = "/em/" + ppparent._id + "/" + pparent._id + "/" + parent.no + "?"
+                    var url = "/em/api/" + ppparent._id + "/" + pparent._id + "/" + parent.no + "?"
                     for (var i = 0; i < parent.args.length; i++) {
                       if (obj._id === parent.args[i]["_id"]) url += parent.args[i]["_id"] + "=" + obj.value + "&"
                       else url += parent.args[i]["_id"] + "=" + parent.args[i].value + "&"
